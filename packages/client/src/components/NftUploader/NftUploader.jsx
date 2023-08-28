@@ -1,7 +1,7 @@
 import { Web3Storage } from 'web3.storage'
 import Web3Mint from "../../utils/Web3Mint.json";
-// import { ethers } from "ethers";
-import { Web3Provider } from "@ethersproject/providers";
+import { ethers } from "ethers";
+// import { Web3Provider } from "@ethersproject/providers";
 import { Button } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from 'react'
@@ -63,8 +63,9 @@ const NftUploader = () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
+        const provider = new ethers.BrowserProvider(window.ethereum)
         // const provider = new ethers.providers.Web3Provider(ethereum);
-        const provider = new Web3Provider(ethereum);
+
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
           CONTRACT_ADDRESS,
