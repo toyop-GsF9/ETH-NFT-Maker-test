@@ -1,12 +1,11 @@
-import { Web3Storage } from 'web3.storage'
-import Web3Mint from "../../utils/Web3Mint.json";
 import { ethers } from "ethers";
-// import { Web3Provider } from "@ethersproject/providers";
+import Web3Mint from "../../utils/Web3Mint.json";
 import { Button } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from 'react'
 import ImageLogo from "./image.svg";
 import "./NftUploader.css";
+import { Web3Storage } from 'web3.storage'
 
 const NftUploader = () => {
   /*
@@ -64,8 +63,6 @@ const NftUploader = () => {
       const { ethereum } = window;
       if (ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum)
-        // const provider = new ethers.providers.Web3Provider(ethereum);
-
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
           CONTRACT_ADDRESS,
@@ -87,7 +84,21 @@ const NftUploader = () => {
     }
   };
 
+
+  const renderNotConnectedContainer = () => (
+    <button onClick={connectWallet} className="cta-button connect-wallet-button">
+      Connect to Wallet
+    </button>
+  );
+  /*
+   * ページがロードされたときに useEffect()内の関数が呼び出されます。
+   */
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
+
   const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDRFZjUyRDFkODBjRjQ4N0JFMzQ0OEQ4MkY3NkY3MUQzZEIyYjczMjIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTMwODEwMzQ5MTIsIm5hbWUiOiJ0b3lvcCJ9.rWuImk1fUSqyKt0tUfS_WbZUwK16eylfGxPbepPmehU"
+
   const imageToNFT = async (e) => {
     const client = new Web3Storage({ token: API_KEY })
     const image = e.target
@@ -105,20 +116,6 @@ const NftUploader = () => {
     }
   }
 
-
-
-  const renderNotConnectedContainer = () => (
-    <button onClick={connectWallet} className="cta-button connect-wallet-button">
-      Connect to Wallet
-    </button>
-  );
-  /*
-   * ページがロードされたときに useEffect()内の関数が呼び出されます。
-   */
-  useEffect(() => {
-    checkIfWalletIsConnected();
-  }, []);
-
   return (
     <div className="outerBox">
       {currentAccount === "" ? (
@@ -134,12 +131,12 @@ const NftUploader = () => {
           <img src={ImageLogo} alt="imagelogo" />
           <p>ここにドラッグ＆ドロップしてね</p>
         </div>
-        <input className="nftUploadInput" multiple name="imageURL" type="file" accept=".jpg , .jpeg , .png" />
+        <input className="nftUploadInput" multiple name="imageURL" type="file" accept=".jpg , .jpeg , .png" onChange={imageToNFT} />
       </div>
       <p>または</p>
       <Button variant="contained">
         ファイルを選択
-        <input className="nftUploadInput" type="file" accept=".jpg , .jpeg , .png" />
+        <input className="nftUploadInput" type="file" accept=".jpg , .jpeg , .png" onChange={imageToNFT} />
       </Button>
     </div>
   );

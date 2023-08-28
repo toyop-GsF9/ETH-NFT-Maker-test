@@ -15,11 +15,11 @@ contract Web3Mint is ERC721 {
         string imageURL;
     }
 
-    NftAttributes[] Web3Nfts;
-
     using Counters for Counters.Counter;
     // tokenIdはNFTの一意な識別子で、0, 1, 2, .. N のように付与されます。
     Counters.Counter private _tokenIds;
+
+    NftAttributes[] Web3Nfts;
 
     constructor() ERC721("NFT", "nft") {
         console.log("This is my NFT contract.");
